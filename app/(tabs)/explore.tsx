@@ -1,110 +1,192 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Animated, Image, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+const offers = [
+  {
+    id: '1',
+    title: '50% OFF on Sushi',
+    desc: 'Enjoy half price on all sushi platters!',
+    image: 'https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg',
+  },
+  {
+    id: '2',
+    title: 'Free Dessert',
+    desc: 'Get a free dessert with every pizza order!',
+    image: 'https://images.pexels.com/photos/533325/pexels-photo-533325.jpeg',
+  },
+  {
+    id: '3',
+    title: 'Buy 1 Get 1 Burger',
+    desc: 'Double the delight on all burgers!',
+    image: 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg',
+  },
+];
 
-export default function TabTwoScreen() {
+const restaurants = [
+  {
+    id: '1',
+    name: 'Pizza Palace',
+    rating: 4.7,
+    image: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg',
+    cuisine: 'Italian',
+  },
+  {
+    id: '2',
+    name: 'Sushi World',
+    rating: 4.9,
+    image: 'https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg',
+    cuisine: 'Japanese',
+  },
+  {
+    id: '3',
+    name: 'Burger Hub',
+    rating: 4.5,
+    image: 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg',
+    cuisine: 'American',
+  },
+];
+
+export default function ExploreScreen() {
+  const bannerAnim = useRef(new Animated.Value(-200)).current;
+
+  useEffect(() => {
+    Animated.spring(bannerAnim, {
+      toValue: 0,
+      friction: 6,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <LinearGradient colors={["#4ECDC4", "#45B7D1", "#FF6B6B"]} style={styles.container}>
+      <Animated.View style={[styles.banner, { transform: [{ translateY: bannerAnim }] }]}> 
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {offers.map(offer => (
+            <View key={offer.id} style={styles.offerCard}>
+              <Image source={{ uri: offer.image }} style={styles.offerImage} />
+              <View style={styles.offerContent}>
+                <Text style={styles.offerTitle}>{offer.title}</Text>
+                <Text style={styles.offerDesc}>{offer.desc}</Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </Animated.View>
+      <Text style={styles.sectionTitle}>Popular Restaurants</Text>
+      <FlatList
+        data={restaurants}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.restaurantCard}>
+            <Image source={{ uri: item.image }} style={styles.restaurantImage} />
+            <View style={styles.restaurantContent}>
+              <Text style={styles.restaurantName}>{item.name}</Text>
+              <Text style={styles.restaurantCuisine}>{item.cuisine}</Text>
+              <View style={styles.ratingRow}>
+                <Ionicons name="star" size={16} color="#FFD700" />
+                <Text style={styles.ratingText}>{item.rating}</Text>
+              </View>
+            </View>
+          </View>
+        )}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
+      />
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 0,
   },
-  titleContainer: {
+  banner: {
+    height: 180,
+    marginBottom: 20,
+    paddingLeft: 18,
+  },
+  offerCard: {
+    width: 260,
+    height: 160,
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    marginRight: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  offerImage: {
+    width: '100%',
+    height: 90,
+  },
+  offerContent: {
+    padding: 12,
+  },
+  offerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#45B7D1',
+  },
+  offerDesc: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 2,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginLeft: 24,
+    marginBottom: 10,
+  },
+  restaurantCard: {
     flexDirection: 'row',
-    gap: 8,
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    marginHorizontal: 18,
+    marginBottom: 18,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+    overflow: 'hidden',
+  },
+  restaurantImage: {
+    width: 90,
+    height: 90,
+    borderTopLeftRadius: 24,
+    borderBottomLeftRadius: 24,
+  },
+  restaurantContent: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+  },
+  restaurantName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#222',
+  },
+  restaurantCuisine: {
+    fontSize: 14,
+    color: '#888',
+    marginVertical: 2,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  ratingText: {
+    fontSize: 15,
+    color: '#222',
+    marginLeft: 4,
+    fontWeight: 'bold',
   },
 });
